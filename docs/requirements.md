@@ -128,7 +128,6 @@ flowchart TD
 - ログアウトすると、投稿一覧画面に戻る
 
 ## 6. 制約条件
-## 6. 制約条件
 
 ### 納期
 - 最終日は 2026年10月31日（Week 24 の最終日）
@@ -146,5 +145,5 @@ flowchart TD
 - ログインは Laravel Breeze を使う
 - データベースは MySQL を使う
 - 開発環境は Docker、本番環境は AWS（EC2・RDS）を使う
--- 画像はサーバー内（Laravel の storage）に保存する（S3 は余裕があれば対応する）
+- 画像はサーバー内（Laravel の storage）に保存する（S3 は余裕があれば対応する）
 - コードと設計書は gohan-log リポジトリ1つで管理する（設計書は docs/、実装は src/）
