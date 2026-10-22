@@ -1,7 +1,7 @@
 # 画面設計（Figma）
 
 ## Figma の URL
-(https://www.figma.com/design/9d01VM1jhM3kRcmisSKCr6/gohan-log?node-id=4-509&t=hY2iOAX0EjNEbXsV-1)
+https://www.figma.com/design/9d01VM1jhM3kRcmisSKCr6/gohan-log?node-id=4-509&t=hY2iOAX0EjNEbXsV-1 
 
 ## 画面一覧
 | # | 画面 | 説明 |
