@@ -17,3 +17,6 @@ https://www.figma.com/design/9d01VM1jhM3kRcmisSKCr6/gohan-log?node-id=4-509&t=hY
 
 ## 画面遷移図
 ![画面遷移図](screen-transition.png)
+
+- マイページの「この日の合計」と、作成・編集画面の「材料・作り方」は Should の機能（F-09・F-10）
+- 体重の記録画面（F-11・Should）は、時間が余ったときに投稿作成画面と同じレイアウトで作るため、Figma では作っていない
