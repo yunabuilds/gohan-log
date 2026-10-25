@@ -46,4 +46,16 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    // このユーザーの投稿（ユーザーはたくさんの投稿を持つ）
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+
+    // このユーザーがしたお気に入り
+    public function favorites()
+    {
+        return $this->hasMany(Favorite::class);
+    }
 }
