@@ -24,4 +24,13 @@
             </div>
         </div>
     </div>
+
+    {{-- 投稿ボタン：画面の右下に固定（ログイン中だけ表示） --}}
+    @auth
+        <a href="{{ route('posts.create') }}"
+           class="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-blue-600 text-white text-3xl shadow-lg flex items-center justify-center"
+           aria-label="投稿する">
+            +
+        </a>
+    @endauth
 </x-app-layout>

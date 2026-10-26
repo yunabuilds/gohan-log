@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use App\Http\Requests\StorePostRequest;
 
 class PostController extends Controller
 {
@@ -24,18 +25,28 @@ class PostController extends Controller
      * Show the form for creating a new resource.
      */
     public function create()
-    {
-        //
-    }
+{
+    return view('posts.create');
+}
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        //
-    }
+    public function store(StorePostRequest $request)
+{
+    // チェックを通った値だけを取り出す
+    $data = $request->validated();
 
+    // 写真を storage/app/public/posts に保存し、保存先のパスを image_path に入れる
+    $data['image_path'] = $request->file('image')->store('posts', 'public');
+    unset($data['image']);
+
+    // ログイン中のユーザーの投稿として保存する（user_id は自動で入る）
+    $post = auth()->user()->posts()->create($data);
+
+    return redirect()->route('posts.show', $post)
+        ->with('success', '投稿しました！');
+}
     /**
      * Display the specified resource.
      */
