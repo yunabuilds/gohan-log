@@ -11,9 +11,14 @@ class PostController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
-        //
-    }
+{
+    // 投稿者の情報も一緒に取り出し（N+1対策）、新しい順に1ページ12件
+    $posts = Post::with('user')
+        ->latest()
+        ->paginate(12);
+
+    return view('posts.index', compact('posts'));
+}
 
     /**
      * Show the form for creating a new resource.
@@ -35,9 +40,11 @@ class PostController extends Controller
      * Display the specified resource.
      */
     public function show(Post $post)
-    {
-        //
-    }
+{
+    $post->load('user');
+
+    return view('posts.show', compact('post'));
+}
 
     /**
      * Show the form for editing the specified resource.
