@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use App\Http\Requests\StorePostRequest;
+use App\Http\Requests\UpdatePostRequest;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -61,17 +63,31 @@ class PostController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit(Post $post)
-    {
-        //
-    }
+{
+    $this->authorize('update', $post);   // 自分の投稿か確認（Policy）
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Post $post)
-    {
-        //
+    return view('posts.edit', compact('post'));
+}
+
+public function update(UpdatePostRequest $request, Post $post)
+{
+    $this->authorize('update', $post);
+
+    $data = $request->validated();
+
+    // 写真を差し替えたときだけ：新しい写真を保存して、古い写真を消す
+    if ($request->hasFile('image')) {
+        $oldPath = $post->image_path;
+        $data['image_path'] = $request->file('image')->store('posts', 'public');
+        Storage::disk('public')->delete($oldPath);
     }
+    unset($data['image']);
+
+    $post->update($data);
+
+    return redirect()->route('posts.show', $post)
+        ->with('success', '更新しました！');
+}
 
     /**
      * Remove the specified resource from storage.
