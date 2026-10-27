@@ -93,7 +93,16 @@ public function update(UpdatePostRequest $request, Post $post)
      * Remove the specified resource from storage.
      */
     public function destroy(Post $post)
-    {
-        //
-    }
+{
+    $this->authorize('delete', $post);   // 自分の投稿か確認（Policy）
+
+    $imagePath = $post->image_path;
+
+    // 投稿を消してから、写真のファイルも消す
+    $post->delete();
+    Storage::disk('public')->delete($imagePath);
+
+    return redirect()->route('posts.index')
+        ->with('success', '削除しました');
+}
 }

@@ -24,9 +24,20 @@
 
             <div class="flex items-center gap-4">
                 <a href="{{ route('posts.index') }}" class="text-blue-600">一覧に戻る</a>
+
                 {{-- 自分の投稿のときだけ表示（Policy の update を使う） --}}
                 @can('update', $post)
                     <a href="{{ route('posts.edit', $post) }}" class="bg-gray-200 px-4 py-2 rounded">編集</a>
+                @endcan
+
+                {{-- 自分の投稿のときだけ表示（Policy の delete を使う） --}}
+                @can('delete', $post)
+                    <form method="POST" action="{{ route('posts.destroy', $post) }}"
+                          onsubmit="return confirm('この投稿を削除しますか？');">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded">削除</button>
+                    </form>
                 @endcan
             </div>
         </div>

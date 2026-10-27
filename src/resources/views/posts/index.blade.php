@@ -1,6 +1,11 @@
 <x-app-layout>
     <div class="py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            {{-- 削除したあとなどに出るメッセージ --}}
+            @if (session('success'))
+                <p class="text-green-600 mb-4">{{ session('success') }}</p>
+            @endif
+
             <h1 class="text-2xl font-bold mb-6">投稿一覧</h1>
 
             {{-- 3列で並べる（Figma の 01 投稿一覧と同じ） --}}
