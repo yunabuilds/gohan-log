@@ -30,6 +30,7 @@ class StorePostRequest extends FormRequest
             'image.required' => '写真を選んでください。',
             'image.image' => '写真は画像ファイルを選んでください。',
             'image.max' => '写真は10MBまでです。',
+            'image.uploaded' => '写真のアップロードに失敗しました。10MBまでの画像を選んでください。',
             'dish_name.required' => '料理名を入力してください。',
             'dish_name.max' => '料理名は100文字までです。',
             'calories.required' => 'カロリーを入力してください。',
