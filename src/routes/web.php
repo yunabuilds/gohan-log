@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MyPageController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -23,6 +24,10 @@ Route::middleware('auth')->group(function () {
 
     // 投稿：作成・保存・編集・更新・削除
     Route::resource('posts', PostController::class)->except(['index', 'show']);
+
+
+ // マイページ（日付で絞り込み）
+    Route::get('/mypage', [MyPageController::class, 'index'])->name('mypage');
 });
 
 // ログインが不要なルート：投稿の一覧・詳細

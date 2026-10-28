@@ -15,6 +15,12 @@
                     <x-nav-link :href="route('posts.index')" :active="request()->routeIs('posts.index')">
                         投稿一覧
                     </x-nav-link>
+                    {{-- マイページ（ログイン中だけ） --}}
+                    @auth
+                        <x-nav-link :href="route('mypage')" :active="request()->routeIs('mypage')">
+                            マイページ
+                        </x-nav-link>
+                    @endauth
                 </div>
             </div>
 
@@ -76,6 +82,12 @@
             <x-responsive-nav-link :href="route('posts.index')" :active="request()->routeIs('posts.index')">
                 投稿一覧
             </x-responsive-nav-link>
+            {{-- マイページ（ログイン中だけ） --}}
+            @auth
+                <x-responsive-nav-link :href="route('mypage')" :active="request()->routeIs('mypage')">
+                    マイページ
+                </x-responsive-nav-link>
+            @endauth
         </div>
 
         <div class="pt-4 pb-1 border-t border-gray-200">
