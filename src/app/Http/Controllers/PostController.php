@@ -56,7 +56,14 @@ class PostController extends Controller
 {
     $post->load('user');
 
-    return view('posts.show', compact('post'));
+    // ログインしているときだけ「自分がお気に入りしているか」を調べる（予想32の対策）
+    $isFavorited = auth()->check()
+        ? $post->favorites()->where('user_id', auth()->id())->exists()
+        : false;
+
+    $favoritesCount = $post->favorites()->count();
+
+    return view('posts.show', compact('post', 'isFavorited', 'favoritesCount'));
 }
 
     /**

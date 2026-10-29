@@ -9,7 +9,48 @@
             <img src="{{ Storage::url($post->image_path) }}" alt="{{ $post->dish_name }}"
                  class="w-full aspect-square object-cover rounded-lg bg-gray-200 mb-4">
 
-            <h1 class="text-2xl font-bold mb-2">{{ $post->dish_name }}</h1>
+            {{-- 料理名と ♡ ボタンを横並びに --}}
+            <div class="flex items-center justify-between mb-2">
+                <h1 class="text-2xl font-bold">{{ $post->dish_name }}</h1>
+
+                {{-- ♡ ボタン（Ajax：ページを再読み込みしない） --}}
+                <div x-data="{
+                    favorited: {{ $isFavorited ? 'true' : 'false' }},
+                    count: {{ $favoritesCount }},
+                    toggleFavorite() {
+                        fetch('{{ route('posts.favorite', $post) }}', {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content,
+                                'Accept': 'application/json',
+                            },
+                        })
+                        .then(res => {
+                            // ログインしていない（401）ときはログイン画面へ
+                            if (res.status === 401) {
+                                window.location.href = '{{ route('login') }}';
+                                return null;
+                            }
+                            return res.json();
+                        })
+                        .then(data => {
+                            if (!data) return;
+                            this.favorited = data.favorited;
+                            this.count = data.count;
+                        });
+                    }
+                }">
+                    <button type="button" @click="toggleFavorite()"
+                            :class="favorited ? 'text-red-500' : 'text-gray-400'"
+                            class="flex items-center gap-1 text-lg"
+                            aria-label="お気に入り">
+                        <svg class="w-7 h-7" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                        </svg>
+                        <span x-text="count"></span>
+                    </button>
+                </div>
+            </div>
 
             <div class="text-gray-600 mb-4 space-y-1">
                 <p>{{ $post->calories }} kcal</p>

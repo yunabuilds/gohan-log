@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\MyPageController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
@@ -28,6 +29,9 @@ Route::middleware('auth')->group(function () {
 
  // マイページ（日付で絞り込み）
     Route::get('/mypage', [MyPageController::class, 'index'])->name('mypage');
+
+    // お気に入りの登録・解除（Ajax・JSON を返す）
+    Route::post('/posts/{post}/favorite', [FavoriteController::class, 'toggle'])->name('posts.favorite');
 });
 
 // ログインが不要なルート：投稿の一覧・詳細
