@@ -20,6 +20,10 @@
                         <x-nav-link :href="route('mypage')" :active="request()->routeIs('mypage')">
                             マイページ
                         </x-nav-link>
+                        
+                        <x-nav-link :href="route('favorites.index')" :active="request()->routeIs('favorites.index')">
+                            お気に入り
+                        </x-nav-link>
                     @endauth
                 </div>
             </div>
@@ -86,6 +90,10 @@
             @auth
                 <x-responsive-nav-link :href="route('mypage')" :active="request()->routeIs('mypage')">
                     マイページ
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link :href="route('favorites.index')" :active="request()->routeIs('favorites.index')">
+                    お気に入り
                 </x-responsive-nav-link>
             @endauth
         </div>

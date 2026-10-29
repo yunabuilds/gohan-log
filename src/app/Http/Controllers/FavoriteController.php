@@ -7,6 +7,21 @@ use Illuminate\Http\Request;
 
 class FavoriteController extends Controller
 {
+    // お気に入り一覧：自分がお気に入りした投稿
+    public function index(Request $request)
+    {
+        $userId = $request->user()->id;
+
+        $posts = Post::with('user')
+            ->whereHas('favorites', function ($query) use ($userId) {
+                $query->where('user_id', $userId);
+            })
+            ->latest()
+            ->paginate(12);
+
+        return view('favorites.index', compact('posts'));
+    }
+
     // お気に入りの登録・解除を切り替えて、JSON を返す
     public function toggle(Request $request, Post $post)
     {
