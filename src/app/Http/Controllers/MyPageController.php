@@ -18,6 +18,8 @@ class MyPageController extends Controller
 
         // 自分の投稿のうち、その日に食べたものだけ
         $posts = $request->user()->posts()
+            ->with('user')             
+            ->withCount('favorites')
             ->whereDate('eaten_on', $date)
             ->latest()
             ->get();

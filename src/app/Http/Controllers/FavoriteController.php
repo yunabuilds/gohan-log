@@ -13,6 +13,7 @@ class FavoriteController extends Controller
         $userId = $request->user()->id;
 
         $posts = Post::with('user')
+            ->withCount('favorites')
             ->whereHas('favorites', function ($query) use ($userId) {
                 $query->where('user_id', $userId);
             })

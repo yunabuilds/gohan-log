@@ -17,6 +17,7 @@ class PostController extends Controller
 {
     // 投稿者の情報も一緒に取り出し（N+1対策）、新しい順に1ページ12件
     $posts = Post::with('user')
+        ->withCount('favorites')
         ->latest()
         ->paginate(12);
 
