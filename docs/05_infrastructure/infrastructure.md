@@ -16,7 +16,7 @@ graph TB
         App --> Redis[(Redis コンテナ<br>キャッシュ)]
         App --> Storage[storage<br>画像の保存先]
     end
-    App -->|TCP 3306| RDS[(RDS MySQL 8.0<br>gohan_log データベース)]
+       App -->|TCP 3306| RDS[(RDS MySQL 8.4<br>gohan_log データベース)]
     GHA[GitHub Actions<br>gohan-log リポジトリ] -->|テスト → イメージをビルド → デプロイ| EC2
 ```
 
@@ -26,7 +26,7 @@ graph TB
 | クライアント | ブラウザ・スマホ | HTTPS でアクセスする |
 | Web サーバー | EC2 の Nginx、nginx コンテナ | HTTPS を受け付け、Laravel に取り次ぐ |
 | アプリサーバー | app コンテナ（Laravel 12） | 画面を作る |
-| データベース | RDS（MySQL 8.0） | ユーザー・投稿・お気に入り・体重の記録を保存する |
+| データベース | RDS（MySQL 8.4） | ユーザー・投稿・お気に入り・体重の記録を保存する |
 | キャッシュ | Redis コンテナ | Week 17 で導入 |
 | ストレージ | storage（EC2 内） | 投稿の写真を保存する。S3 は余裕があれば対応する |
 | CI/CD | GitHub Actions | gohan-log の main への push でテストとデプロイを自動で行う |

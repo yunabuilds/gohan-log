@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use App\Http\Requests\StorePostRequest;
+use App\Http\Requests\UpdatePostRequest;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -15,6 +17,7 @@ class PostController extends Controller
 {
     // 投稿者の情報も一緒に取り出し（N+1対策）、新しい順に1ページ12件
     $posts = Post::with('user')
+        ->withCount('favorites')
         ->latest()
         ->paginate(12);
 
@@ -54,30 +57,60 @@ class PostController extends Controller
 {
     $post->load('user');
 
-    return view('posts.show', compact('post'));
+    // ログインしているときだけ「自分がお気に入りしているか」を調べる（予想32の対策）
+    $isFavorited = auth()->check()
+        ? $post->favorites()->where('user_id', auth()->id())->exists()
+        : false;
+
+    $favoritesCount = $post->favorites()->count();
+
+    return view('posts.show', compact('post', 'isFavorited', 'favoritesCount'));
 }
 
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(Post $post)
-    {
-        //
-    }
+{
+    $this->authorize('update', $post);   // 自分の投稿か確認（Policy）
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Post $post)
-    {
-        //
+    return view('posts.edit', compact('post'));
+}
+
+public function update(UpdatePostRequest $request, Post $post)
+{
+    $this->authorize('update', $post);
+
+    $data = $request->validated();
+
+    // 写真を差し替えたときだけ：新しい写真を保存して、古い写真を消す
+    if ($request->hasFile('image')) {
+        $oldPath = $post->image_path;
+        $data['image_path'] = $request->file('image')->store('posts', 'public');
+        Storage::disk('public')->delete($oldPath);
     }
+    unset($data['image']);
+
+    $post->update($data);
+
+    return redirect()->route('posts.show', $post)
+        ->with('success', '更新しました！');
+}
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Post $post)
-    {
-        //
-    }
+{
+    $this->authorize('delete', $post);   // 自分の投稿か確認（Policy）
+
+    $imagePath = $post->image_path;
+
+    // 投稿を消してから、写真のファイルも消す
+    $post->delete();
+    Storage::disk('public')->delete($imagePath);
+
+    return redirect()->route('posts.index')
+        ->with('success', '削除しました');
+}
 }
