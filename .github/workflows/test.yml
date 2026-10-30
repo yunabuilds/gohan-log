@@ -1,0 +1,44 @@
+name: Test
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    # Laravel は src/ の中にあるので、コマンドはそこで実行する
+    defaults:
+      run:
+        working-directory: src
+
+    steps:
+      - name: チェックアウト
+        uses: actions/checkout@v4
+
+      - name: PHP を用意
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, pdo_sqlite, gd
+
+      - name: Node.js を用意
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 部品を入れる
+        run: composer install --no-interaction --prefer-dist
+
+      - name: 画面の CSS・JS を作る（テストで画面を表示するため）
+        run: npm ci && npm run build
+
+      - name: テスト用の .env を作る
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      - name: テストを実行
+        run: php artisan test

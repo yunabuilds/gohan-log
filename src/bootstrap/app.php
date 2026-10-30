@@ -11,7 +11,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        // EC2 の Nginx（受付）が付けた「https で来た」というメモを信用する
+        // gohan-log は 127.0.0.1 からしか入れないので、受付以外からメモが届くことはない
+        $middleware->trustProxies(at: '*');
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

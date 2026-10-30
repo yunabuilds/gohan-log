@@ -1,0 +1,43 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 本番環境（EC2）にデプロイ
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            set -e
+            cd ~/gohan-log
+            git pull origin main
+
+            # コンテナを起動（Dockerfile が変わっていればイメージも作り直す）
+            docker compose -f docker-compose.prod.yml up -d --build
+
+            # 部品（本番に要らない開発用の部品は入れない）
+            docker compose -f docker-compose.prod.yml exec -T app composer install --no-dev --optimize-autoloader
+
+            # 画面の CSS・JS を作る（EC2 に Node.js がないので、使い捨ての Node.js コンテナで作って、部品は消す）
+            docker run --rm -v ~/gohan-log/src:/app -w /app node:20-alpine sh -c "npm ci && npm run build && rm -rf node_modules"
+
+            # DB のテーブルを最新に・設定を本番用にまとめる
+            docker compose -f docker-compose.prod.yml exec -T app php artisan migrate --force
+            docker compose -f docker-compose.prod.yml exec -T app php artisan config:cache
+            docker compose -f docker-compose.prod.yml exec -T app php artisan route:cache
+            docker compose -f docker-compose.prod.yml exec -T app php artisan view:cache
+
+            # 書き込む棚の持ち主を www-data に（Week 22 の tempnam・504 の対策）
+            docker compose -f docker-compose.prod.yml exec -T app chown -R www-data:www-data storage bootstrap/cache
+
+            # 使わなくなったイメージを片づけて、ディスクを空ける
+            docker image prune -f
