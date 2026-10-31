@@ -22,7 +22,7 @@ jobs:
             git pull origin main
 
             # コンテナを起動（Dockerfile が変わっていればイメージも作り直す）
-            docker compose -f docker-compose.prod.yml up -d --build
+            docker compose -f docker-compose.prod.yml up -d
 
             # 部品（本番に要らない開発用の部品は入れない）
             docker compose -f docker-compose.prod.yml exec -T app composer install --no-dev --optimize-autoloader
