@@ -31,12 +31,22 @@
                                 window.location.href = '{{ route('login') }}';
                                 return null;
                             }
+                            // それ以外のエラー（419 ページの期限切れ、500 など）のときは、画面を変えずに知らせる
+                            if (!res.ok) {
+                                alert('お気に入りに失敗しました。ページを再読み込みしてください');
+                                return null;
+                            }
                             return res.json();
                         })
                         .then(data => {
+                            // 成功したときだけ ♡ と件数を変える
                             if (!data) return;
                             this.favorited = data.favorited;
                             this.count = data.count;
+                        })
+                        .catch(() => {
+                            // 通信そのものが失敗したとき（ネットが切れているなど）
+                            alert('通信に失敗しました。時間をおいてもう一度お試しください');
                         });
                     }
                 }">
