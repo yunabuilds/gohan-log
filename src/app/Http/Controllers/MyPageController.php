@@ -18,12 +18,15 @@ class MyPageController extends Controller
 
         // 自分の投稿のうち、その日に食べたものだけ
         $posts = $request->user()->posts()
-            ->with('user')             
+            ->with('user')
             ->withCount('favorites')
             ->whereDate('eaten_on', $date)
             ->latest()
             ->get();
 
-        return view('mypage', compact('posts', 'date'));
+        // その日の合計カロリー（投稿が0件なら 0）
+        $totalCalories = $posts->sum('calories');
+
+        return view('mypage', compact('posts', 'date', 'totalCalories'));
     }
 }
