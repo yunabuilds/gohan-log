@@ -10,6 +10,9 @@
             </form>
             @error('date') <p class="text-red-600 text-sm mb-4">日付を正しく入力してください。</p> @enderror
 
+            {{-- その日の合計カロリー（US-9） --}}
+            <p class="text-lg font-bold mb-4">合計：{{ $totalCalories }} kcal</p>
+
             <h2 class="font-bold mb-4">{{ $date }} の記録（{{ $posts->count() }}件）</h2>
 
             @if ($posts->isEmpty())
