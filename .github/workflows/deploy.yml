@@ -21,9 +21,11 @@ jobs:
             cd ~/gohan-log
             git pull origin main
 
-            # コンテナを起動（Dockerfile が変わっていればイメージも作り直す）
+            # コンテナを起動（ディスク不足を防ぐため、イメージは作り直さない）
+            # Dockerfile を変えたときは、EC2 にログインして次を手で実行する
+            #   docker compose -f docker-compose.prod.yml up -d --build
             docker compose -f docker-compose.prod.yml up -d
-
+            
             # 部品（本番に要らない開発用の部品は入れない）
             docker compose -f docker-compose.prod.yml exec -T app composer install --no-dev --optimize-autoloader
 
