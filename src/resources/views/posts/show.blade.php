@@ -68,12 +68,25 @@
                 <p>投稿者：{{ $post->user->name }}</p>
             </div>
 
-            {{-- メモは任意なので、あるときだけ表示 --}}
+                        {{-- メモは任意なので、あるときだけ表示 --}}
             @if ($post->memo)
                 <p class="whitespace-pre-line mb-4">{{ $post->memo }}</p>
             @endif
 
+                        {{-- 材料は任意なので、あるときだけ表示 --}}
+            @if ($post->ingredients)
+                <h2 class="font-bold mb-1">材料</h2>
+                <p class="whitespace-pre-line mb-4">{{ $post->ingredients }}</p>
+            @endif
+
+            {{-- 作り方は任意なので、あるときだけ表示 --}}
+            @if ($post->steps)
+                <h2 class="font-bold mb-1">作り方</h2>
+                <p class="whitespace-pre-line mb-4">{{ $post->steps }}</p>
+            @endif
+
             <div class="flex items-center gap-4">
+            
                 <a href="{{ route('posts.index') }}" class="text-blue-600">一覧に戻る</a>
 
                 {{-- 自分の投稿のときだけ表示（Policy の update を使う） --}}
