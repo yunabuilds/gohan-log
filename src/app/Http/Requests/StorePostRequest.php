@@ -20,7 +20,9 @@ class StorePostRequest extends FormRequest
             'dish_name' => 'required|string|max:100',    // 料理名：必須・100文字まで
             'calories' => 'required|integer|min:0',      // カロリー：必須・0以上の整数
             'eaten_on' => 'required|date',               // 食べた日：必須・日付
-            'memo' => 'nullable|string',                 // メモ：任意
+            'memo' => 'nullable|string',
+            'ingredients' => 'nullable|string', 
+            'steps' => 'nullable|string',                // メモ：任意
         ];
     }
 

@@ -42,6 +42,18 @@
                     @error('memo') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
                 </div>
 
+                <div>
+                    <label class="block font-medium mb-1">材料（任意）</label>
+                    <textarea name="ingredients" rows="3" class="w-full rounded border-gray-300">{{ old('ingredients') }}</textarea>
+                    @error('ingredients') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
+                </div>
+
+                <div>
+                    <label class="block font-medium mb-1">作り方（任意）</label>
+                    <textarea name="steps" rows="3" class="w-full rounded border-gray-300">{{ old('steps') }}</textarea>
+                    @error('steps') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
+                </div>
+                
                 <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">投稿する</button>
             </form>
         </div>

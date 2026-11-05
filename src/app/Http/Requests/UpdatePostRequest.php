@@ -20,6 +20,8 @@ class UpdatePostRequest extends FormRequest
             'calories' => 'required|integer|min:0',
             'eaten_on' => 'required|date',
             'memo' => 'nullable|string',
+            'ingredients' => 'nullable|string',
+            'steps' => 'nullable|string',
         ];
     }
 
