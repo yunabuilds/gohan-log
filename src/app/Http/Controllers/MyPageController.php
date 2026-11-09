@@ -27,6 +27,11 @@ class MyPageController extends Controller
         // その日の合計カロリー（投稿が0件なら 0）
         $totalCalories = $posts->sum('calories');
 
-        return view('mypage', compact('posts', 'date', 'totalCalories'));
+        // 自分の体重の記録（記録した日の新しい順）（US-11）
+        $weights = $request->user()->weights()
+            ->orderByDesc('recorded_on')
+            ->get();
+
+        return view('mypage', compact('posts', 'date', 'totalCalories', 'weights'));
     }
 }
