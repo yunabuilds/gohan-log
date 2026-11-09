@@ -58,4 +58,11 @@ class User extends Authenticatable
     {
         return $this->hasMany(Favorite::class);
     }
+
+    // このユーザーの体重（ユーザーはたくさんの記録を持つ）
+    public function weights()
+    {
+        return $this->hasMany(Weight::class);
+    }
+
 }
