@@ -4,6 +4,7 @@ use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\MyPageController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\WeightController;
 use Illuminate\Support\Facades\Route;
 
 // トップは投稿一覧へ
@@ -34,6 +35,10 @@ Route::middleware('auth')->group(function () {
 
     // お気に入りの登録・解除（Ajax・JSON を返す）
     Route::post('/posts/{post}/favorite', [FavoriteController::class, 'toggle'])->name('posts.favorite');
+
+    // 体重（一日一回記録できる）
+    Route::get('/weights/create', [WeightController::class, 'create'])->name('weights.create');
+    Route::post('/weights', [WeightController::class, 'store'])->name('weights.store');
 });
 
 // ログインが不要なルート：投稿の一覧・詳細
